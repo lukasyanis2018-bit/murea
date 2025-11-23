@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avocat M. - Cabinet Avocat</title>
+    <title>Avocat M. - Cabinet Avocat Premium</title>
     <style>
         * {
             margin: 0;
@@ -11,49 +11,66 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-red: #c41e3a;
+            --light-blue: #87CEEB;
+            --dark: #1a1a1a;
+            --light-gray: #f8f9fa;
+        }
+
         body {
             font-family: 'Georgia', serif;
-            color: #1a1a1a;
+            color: var(--dark);
             overflow-x: hidden;
             background: #fff;
             line-height: 1.6;
         }
 
-        /* Page Transition Overlay - Sliding Paper Effect */
+        /* Custom Cursor - Disabled */
+
+        /* Page Transition Overlay - Advanced */
         .page-transition {
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-overlay {
+            position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: all;
+            background: linear-gradient(135deg, #fff 0%, var(--light-gray) 100%);
             transition: left 1s cubic-bezier(0.77, 0, 0.175, 1);
             box-shadow: -20px 0 60px rgba(0,0,0,0.15);
         }
 
-        .page-transition.active {
+        .page-transition.active .transition-overlay {
             left: 0;
-            pointer-events: all;
         }
         
-        .page-transition.hide {
+        .page-transition.hide .transition-overlay {
             left: 100%;
-            pointer-events: none;
         }
 
         .page-transition-logo {
-            color: #c41e3a;
+            color: var(--primary-red);
             font-size: 3rem;
             font-weight: 300;
             letter-spacing: 8px;
             transform: scale(0.9);
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1) 0.3s;
+            z-index: 1;
+            position: relative;
         }
 
         .page-transition.active .page-transition-logo {
@@ -67,24 +84,23 @@
             transition: all 0.3s ease;
         }
 
-        /* Header */
+        /* Enhanced Header with Glass Morphism */
         header {
-            background: rgba(255, 255, 255, 0.98);
-            padding: 2rem 6%;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.85);
+            padding: 1.5rem 6%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid rgba(196, 30, 58, 0.1);
+            transition: all 0.3s ease;
         }
 
-        @keyframes fadeInDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        header.scrolled {
+            padding: 1rem 6%;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
         }
 
         nav {
@@ -96,76 +112,132 @@
         }
 
         .logo {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 400;
-            color: #1a1a1a;
+            color: var(--dark);
             letter-spacing: 3px;
             text-decoration: none;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '⚖';
+            font-size: 1.4rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .logo:hover::before {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .logo span {
-            color: #c41e3a;
+            color: var(--primary-red);
             font-weight: 300;
+            position: relative;
+            display: inline-block;
         }
 
-        .logo:hover {
-            letter-spacing: 4px;
+        .logo span::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .logo:hover span::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
         .nav-links {
             display: flex;
-            gap: 3.5rem;
+            gap: 3rem;
             list-style: none;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #1a1a1a;
+            color: var(--dark);
             font-size: 0.95rem;
             letter-spacing: 1px;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
-            padding-bottom: 5px;
+            padding: 8px 16px;
             font-weight: 400;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 2px;
-            background: #c41e3a;
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .nav-links a:hover {
-            color: #c41e3a;
+            color: var(--primary-red);
         }
 
         .nav-links a:hover::after {
-            width: 100%;
+            width: 80%;
         }
 
         /* Page Container */
         .page {
             display: none;
             min-height: 100vh;
+            opacity: 0;
+            animation: fadeInPage 0.6s ease forwards;
         }
 
         .page.active {
             display: block;
         }
 
-        /* Hero Section - Home - Simple */
-        .hero-simple {
+        @keyframes fadeInPage {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Enhanced Hero Section with Parallax */
+        .hero-advanced {
             margin-top: 90px;
-            min-height: 600px;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
@@ -174,857 +246,995 @@
             overflow: hidden;
         }
 
-        .hero-simple::before {
-            content: '';
+        .hero-bg-shapes {
             position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 60%;
-            height: 150%;
-            background: radial-gradient(ellipse at center, rgba(196, 30, 58, 0.03) 0%, transparent 70%);
-            transform: rotate(-15deg);
-            z-index: 0;
-        }
-
-        .hero-simple::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -10%;
-            width: 40%;
-            height: 80%;
-            background: radial-gradient(ellipse at center, rgba(135, 206, 235, 0.04) 0%, transparent 70%);
-            transform: rotate(15deg);
-            z-index: 0;
-        }
-
-        .hero-simple .hero-content {
-            max-width: 1600px;
+            top: 0;
+            left: 0;
             width: 100%;
-            margin: 0 auto;
-            z-index: 1;
-            position: relative;
-        }
-
-        .hero-simple h1 {
-            font-size: 5rem;
-            font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            letter-spacing: -1px;
-            color: #1a1a1a;
-        }
-
-        .hero-simple .highlight {
-            color: #c41e3a;
-            font-weight: 400;
-            display: block;
-            margin-top: 0.5rem;
-        }
-
-        .hero-simple p {
-            font-size: 1.4rem;
-            font-weight: 300;
-            max-width: 650px;
-            line-height: 1.9;
-            margin-bottom: 3rem;
-            color: #444;
-            letter-spacing: 0.3px;
-        }
-
-        /* Hero Section - Home */
-        .hero {
-            margin-top: 90px;
-            height: 700px;
-            min-height: 700px;
-            position: relative;
+            height: 100%;
+            z-index: 0;
             overflow: hidden;
         }
 
-        .carousel {
-            width: 100%;
-            height: 100%;
-            min-height: 700px;
-            position: relative;
-        }
-
-        .carousel-slide {
+        .shape {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            min-height: 700px;
-            display: flex;
-            align-items: center;
-            padding: 6rem 6%;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: 0;
+            opacity: 0.05;
+            transition: all 0.3s ease;
         }
 
-        .carousel-slide.active {
-            opacity: 1;
-            z-index: 1;
+        .shape-1 {
+            top: -10%;
+            right: -5%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, var(--primary-red) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
         }
 
-        .carousel-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 245, 245, 0.88) 100%);
-            z-index: 0;
-        }
-
-        .hero-bg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 245, 0.92) 100%);
-            z-index: 0;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 60%;
-            height: 150%;
-            background: radial-gradient(ellipse at center, rgba(196, 30, 58, 0.03) 0%, transparent 70%);
-            transform: rotate(-15deg);
-            z-index: 1;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -10%;
+        .shape-2 {
+            bottom: -10%;
+            left: -5%;
             width: 40%;
-            height: 80%;
-            background: radial-gradient(ellipse at center, rgba(135, 206, 235, 0.04) 0%, transparent 70%);
-            transform: rotate(15deg);
-            z-index: 1;
+            height: 40%;
+            background: radial-gradient(circle, var(--light-blue) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 25s infinite ease-in-out reverse;
+        }
+
+        .shape-3 {
+            top: 30%;
+            left: 10%;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary-red), var(--light-blue));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-50px) scale(1.1);
+            }
+        }
+
+        @keyframes morph {
+            0%, 100% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+                transform: rotate(0deg);
+            }
+            50% {
+                border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+                transform: rotate(180deg);
+            }
         }
 
         .hero-content {
             max-width: 1600px;
             width: 100%;
             margin: 0 auto;
-            z-index: 2;
+            z-index: 1;
             position: relative;
         }
 
-        /* Carousel Navigation Arrows */
-        .carousel-prev,
-        .carousel-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(26, 26, 26, 0.6);
-            color: #fff;
-            border: none;
-            padding: 1.5rem 1.2rem;
-            cursor: pointer;
-            z-index: 3;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .carousel-prev:hover,
-        .carousel-next:hover {
-            background: rgba(196, 30, 58, 0.9);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .carousel-prev {
-            left: 2rem;
-        }
-
-        .carousel-next {
-            right: 2rem;
-        }
-
-        /* Carousel Dots */
-        .carousel-dots {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 1rem;
-            z-index: 3;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            border: 2px solid rgba(26, 26, 26, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dot:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.2);
-        }
-
-        .dot.active {
-            background: #c41e3a;
-            border-color: #c41e3a;
-            width: 35px;
-            border-radius: 6px;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 5rem;
+        .hero-content h1 {
+            font-size: 5.5rem;
             font-weight: 300;
             line-height: 1.1;
             margin-bottom: 2rem;
-            letter-spacing: -1px;
-            color: #c41e3a;
+            letter-spacing: -2px;
+            color: var(--dark);
+            opacity: 0;
+            animation: slideInUp 1s ease forwards 0.3s;
         }
 
-        .hero .highlight {
-            color: #c41e3a;
+        .hero-content .highlight {
+            color: var(--primary-red);
             font-weight: 400;
             display: block;
             margin-top: 0.5rem;
+            position: relative;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .hero p {
-            font-size: 1.4rem;
+        .hero-content p {
+            font-size: 1.5rem;
             font-weight: 300;
-            max-width: 650px;
+            max-width: 700px;
             line-height: 1.9;
             margin-bottom: 3rem;
             color: #444;
-            letter-spacing: 0.3px;
-        }
-
-        .stats {
-            display: flex;
-            gap: 5rem;
-            margin-top: 4rem;
-        }
-
-        .stat {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .stat::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #c41e3a 0%, rgba(196, 30, 58, 0.3) 100%);
-        }
-
-        .stat h3 {
-            font-size: 3.5rem;
-            font-weight: 300;
-            color: #c41e3a;
-            margin-bottom: 0.8rem;
-            letter-spacing: -1px;
-        }
-
-        .stat p {
-            font-size: 1rem;
-            color: #666;
-            margin: 0;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
+            opacity: 0;
+            animation: slideInUp 1s ease forwards 0.6s;
         }
 
-        /* About Section */
-        .about-section {
-            margin-top: 80px;
-            padding: 6rem 5%;
-            background: #fff;
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .about-header h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .about-header .line {
-            width: 80px;
-            height: 3px;
-            background: #c41e3a;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .profile-section {
-            text-align: center;
-        }
-
-        .profile-image {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #c41e3a 0%, #87ceeb 100%);
-            margin: 0 auto 2rem;
+        .hero-cta {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            color: #fff;
-            font-weight: 300;
-        }
-
-        .profile-name {
-            font-size: 1.8rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .profile-title {
-            font-size: 1.1rem;
-            color: #c41e3a;
-            font-weight: 300;
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.9;
-            color: #333;
-        }
-
-        .about-text h2 {
-            font-size: 2rem;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .about-text ul {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .about-text ul li {
-            padding: 0.8rem 0;
-            padding-left: 2rem;
-            position: relative;
-        }
-
-        .about-text ul li:before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #c41e3a;
-            font-size: 1.5rem;
-            line-height: 1;
-        }
-
-        /* Practice Areas Section */
-        .practice-section {
-            margin-top: 80px;
-            padding: 6rem 5%;
-            background: #f8f9fa;
-        }
-
-        .practice-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .section-header .line {
-            width: 80px;
-            height: 3px;
-            background: #c41e3a;
-            margin: 0 auto;
-        }
-
-        .practice-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            opacity: 0;
+            animation: slideInUp 1s ease forwards 0.9s;
         }
 
-        .practice-card {
-            background: #fff;
-            padding: 2.5rem;
-            border-left: 4px solid #c41e3a;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .practice-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(196, 30, 58, 0.1);
-        }
-
-        .practice-card h3 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .practice-card p {
-            color: #666;
-            line-height: 1.7;
+        .btn-primary, .btn-secondary {
+            padding: 18px 45px;
             font-size: 1rem;
-        }
-
-        /* Articles Section */
-        .articles-section {
-            margin-top: 80px;
-            padding: 6rem 5%;
-            background: #fff;
-            min-height: calc(100vh - 80px);
-        }
-
-        .articles-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 0;
-            color: #999;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .empty-state p {
-            font-size: 1.2rem;
-        }
-
-        /* Contact Section */
-        .contact-section {
-            padding: 8rem 6%;
-            background: #fff;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Home Practice Preview */
-        .home-practice-preview {
-            padding: 8rem 6%;
-            background: #fff;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
-            position: relative;
-        }
-
-        .section-header h2 {
-            font-size: 3.5rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
-            letter-spacing: -0.5px;
-        }
-
-        .section-header .line {
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #c41e3a 50%, transparent 100%);
-            margin: 0 auto 1.5rem;
-        }
-
-        .section-subtitle {
-            color: #666;
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-        }
-
-        .practice-preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin-bottom: 4rem;
-            max-width: 1600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .practice-preview-card {
-            background: #fafafa;
-            padding: 4rem 3rem;
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            border: 1px solid #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            border: none;
         }
 
-        .practice-preview-card::before {
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-red) 0%, #a01828 100%);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
+        }
+
+        .btn-primary::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #c41e3a 0%, rgba(196, 30, 58, 0.5) 100%);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .practice-preview-card:hover::before {
-            transform: scaleX(1);
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
-        .practice-preview-card:hover {
-            transform: translateY(-15px);
-            background: #fff;
-            box-shadow: 0 20px 60px rgba(196, 30, 58, 0.08);
-            border-color: rgba(196, 30, 58, 0.1);
-        }
-
-        .practice-preview-card .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .practice-preview-card .icon-box {
-            width: 80px;
-            height: 80px;
-            background: #c41e3a;
-            margin: 0 auto 1.5rem;
-            border-radius: 4px;
-        }
-
-        .practice-preview-card h3 {
-            font-size: 1.8rem;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
-            letter-spacing: 0.5px;
-        }
-
-        .practice-preview-card p {
-            color: #666;
-            line-height: 1.9;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-
-        .learn-more-btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: transparent;
-            color: #c41e3a;
-            border: 2px solid #c41e3a;
-            text-decoration: none;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
-            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            text-transform: uppercase;
-            font-weight: 400;
-        }
-
-        .learn-more-btn:hover {
-            background: #c41e3a;
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(196, 30, 58, 0.2);
-        }
-
-        .view-all-btn-container {
-            text-align: center;
-        }
-
-        .view-all-btn {
-            display: inline-block;
-            padding: 1.2rem 4rem;
-            background: #1a1a1a;
-            color: #fff;
-            border: 2px solid #1a1a1a;
-            text-decoration: none;
-            font-weight: 400;
-            letter-spacing: 2px;
-            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        .view-all-btn:hover {
-            background: transparent;
-            color: #1a1a1a;
+        .btn-primary:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 40px rgba(196, 30, 58, 0.4);
         }
 
-        /* CTA Section */
-        .cta-section {
-            padding: 8rem 6%;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            text-align: center;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid var(--dark);
         }
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(196, 30, 58, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .cta-section::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -15%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(135, 206, 235, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-content h2 {
-            font-size: 3.5rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: -0.5px;
-        }
-
-        .cta-content p {
-            font-size: 1.4rem;
-            margin-bottom: 3rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            padding: 1.4rem 4.5rem;
-            background: #c41e3a;
-            color: #fff;
-            text-decoration: none;
-            font-weight: 400;
-            letter-spacing: 2px;
-            transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            border: 2px solid #c41e3a;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-btn::before {
+        .btn-secondary::after {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: #fff;
-            transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            z-index: -1;
+            background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
-        .cta-btn:hover::before {
-            left: 0;
+        .btn-secondary:hover::after {
+            left: 100%;
         }
 
-        .cta-btn:hover {
-            color: #c41e3a;
+        .btn-secondary:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
             transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(196, 30, 58, 0.3);
         }
 
-        /* Testimonials Section */
-        .testimonials-section {
-            padding: 8rem 6%;
-            background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
+        /* Enhanced News Cards Section */
+        .news-cards-section {
+            padding: 0;
+            background: linear-gradient(135deg, var(--primary-red) 0%, #a01828 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-cards-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
+            animation: backgroundScroll 20s linear infinite;
+        }
+
+        @keyframes backgroundScroll {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(100px);
+            }
+        }
+
+        .news-cards-container {
             max-width: 1600px;
             margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: #fff;
-            padding: 3.5rem;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.06);
-            transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            border: 1px solid rgba(0,0,0,0.05);
-            position: relative;
-        }
-
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            font-size: 6rem;
-            color: rgba(196, 30, 58, 0.08);
-            font-family: Georgia, serif;
-            line-height: 1;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(196, 30, 58, 0.12);
-            border-color: rgba(196, 30, 58, 0.1);
-        }
-
-        .stars {
-            color: #c41e3a;
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: 3px;
-        }
-
-        .testimonial-text {
-            font-size: 1.15rem;
-            line-height: 2;
-            color: #333;
-            margin-bottom: 2rem;
-            font-style: italic;
+            padding: 8rem 6%;
             position: relative;
             z-index: 1;
         }
 
-        .testimonial-author {
-            color: #666;
+        .news-title {
+            color: #fff;
+            font-size: 3.5rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 4rem;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .news-card::after {
+            content: '';
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(196, 30, 58, 0.03) 100%);
+            transition: bottom 0.5s ease;
+        }
+
+        .news-card:hover::after {
+            bottom: 0;
+        }
+
+        .news-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-red), #a01828);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .news-card:hover .news-icon {
+            transform: rotate(360deg) scale(1.1);
+            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.4);
+        }
+
+        .news-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .news-card h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
             font-weight: 400;
-            font-size: 1rem;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Contact Section */
-        .contact-section {
-            padding: 4rem 5%;
+        .news-card p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Enhanced Carousel Section */
+        .carousel-section {
+            padding: 8rem 6%;
             background: #fff;
+            position: relative;
         }
 
-        .contact-container {
-            max-width: 900px;
+        .carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(196, 30, 58, 0.02) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(135, 206, 235, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .carousel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .carousel-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .carousel-header h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .carousel-header .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        .carousel-slide {
+            display: none;
+            padding: 5rem;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #fff 100%);
+            min-height: 500px;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .carousel-slide.active {
+            display: flex;
+            opacity: 1;
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .carousel-slide::before {
+            content: '"';
+            position: absolute;
+            top: 3rem;
+            left: 3rem;
+            font-size: 15rem;
+            color: rgba(196, 30, 58, 0.08);
+            font-family: Georgia, serif;
+            line-height: 0;
+            z-index: 0;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding-right: 3rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .slide-content h3 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 2;
+            margin-bottom: 2.5rem;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-red);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .read-more::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover::after {
+            transform: translateX(10px);
+        }
+
+        .read-more:hover {
+            gap: 15px;
+        }
+
+        .slide-image {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, var(--primary-red), var(--light-blue));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            animation: morphShape 10s infinite ease-in-out;
+        }
+
+        @keyframes morphShape {
+            0%, 100% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+            25% {
+                border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+            }
+            50% {
+                border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+            }
+            75% {
+                border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+            }
+        }
+
+        .slide-image svg {
+            width: 150px;
+            height: 150px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .carousel-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-red), #a01828);
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 15px 40px rgba(196, 30, 58, 0.4);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-red);
+            transform: scale(1.3);
+        }
+
+        .dot.active::before {
+            border-color: var(--primary-red);
+        }
+
+        .dot:hover {
+            transform: scale(1.2);
+        }
+
+        /* Enhanced About Section */
+        .about-section {
+            padding: 10rem 6%;
+            background: linear-gradient(135deg, #fafafa 0%, #fff 100%);
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+        }
+
+        .about-image-main {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary-red), var(--light-blue));
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image-main::before {
+            content: '⚖';
+            font-size: 10rem;
+            color: rgba(255, 255, 255, 0.2);
+            position: absolute;
+        }
+
+        .about-decorative {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-blue), transparent);
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(40px);
+        }
+
+        .about-decorative-1 {
+            top: -50px;
+            right: -50px;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .about-decorative-2 {
+            bottom: -50px;
+            left: -50px;
+            animation: float 20s infinite ease-in-out reverse;
+        }
+
+        .about-content h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .about-content h2 span {
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .stat-box:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        /* Enhanced Practice Areas Section */
+        .practice-section {
+            padding: 10rem 6%;
+            background: #fff;
+            position: relative;
+        }
+
+        .practice-container {
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        .contact-container h2 {
-            font-size: 3.5rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
+        .section-header {
             text-align: center;
-            letter-spacing: -0.5px;
+            margin-bottom: 6rem;
         }
 
-        .contact-container .line {
+        .section-header h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .section-header .line {
             width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #c41e3a 50%, transparent 100%);
-            margin: 0 auto 4rem;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            margin: 0 auto 2rem;
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, var(--light-gray) 0%, #fff 100%);
+            border-radius: 25px;
+            padding: 3.5rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .practice-card:hover::before {
+            left: 100%;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .practice-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary-red), #a01828);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 15px 40px rgba(196, 30, 58, 0.3);
+        }
+
+        .practice-card:hover .practice-icon {
+            transform: rotate(360deg) scale(1.1);
+            box-shadow: 0 20px 50px rgba(196, 30, 58, 0.4);
+        }
+
+        .practice-icon svg {
+            width: 45px;
+            height: 45px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .practice-card h3 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .practice-card p {
+            font-size: 1.15rem;
+            color: #555;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .practice-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .practice-card li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            color: #666;
+            font-size: 1.05rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .practice-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-red);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .practice-card li:hover {
+            padding-left: 2.5rem;
+            color: var(--primary-red);
+        }
+
+        .practice-card li:hover::before {
+            transform: scale(1.2);
+        }
+
+        /* Enhanced Contact Form */
+        .contact-section {
+            padding: 10rem 6%;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #fff 100%);
+            position: relative;
+        }
+
+        .contact-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+        }
+
+        .contact-info h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .contact-info p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.9;
+            margin-bottom: 3rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .contact-item-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-red), #a01828);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-item-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .contact-item-text h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .contact-item-text p {
+            font-size: 1rem;
+            color: #666;
+            margin: 0;
         }
 
         .contact-form {
-            background: #fafafa;
+            background: #fff;
             padding: 4rem;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
         }
 
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.8rem;
-            color: #333;
-            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-size: 1.05rem;
+            font-weight: 500;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
         }
 
         .form-group input,
@@ -1032,17 +1242,19 @@
             width: 100%;
             padding: 1.2rem 1.5rem;
             border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1rem;
             font-family: 'Georgia', serif;
-            font-size: 1.05rem;
             transition: all 0.3s ease;
-            background: #fff;
+            background: var(--light-gray);
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #c41e3a;
-            box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+            border-color: var(--primary-red);
+            background: #fff;
+            box-shadow: 0 5px 20px rgba(196, 30, 58, 0.1);
         }
 
         .form-group textarea {
@@ -1051,70 +1263,112 @@
         }
 
         .submit-btn {
-            background: #1a1a1a;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-red) 0%, #a01828 100%);
             color: #fff;
-            padding: 1.3rem 4rem;
-            border: 2px solid #1a1a1a;
-            font-size: 0.95rem;
-            letter-spacing: 2px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            font-family: 'Georgia', serif;
-            text-transform: uppercase;
-            font-weight: 400;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 15px 40px rgba(196, 30, 58, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .submit-btn:hover::before {
+            width: 400px;
+            height: 400px;
         }
 
         .submit-btn:hover {
-            background: transparent;
-            color: #1a1a1a;
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 50px rgba(196, 30, 58, 0.4);
         }
 
-        /* Footer */
+        /* Enhanced Footer */
         footer {
-            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
-            color: rgba(255,255,255,0.8);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #fff;
             padding: 6rem 6% 3rem;
-            border-top: 1px solid rgba(196, 30, 58, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.02)"/></svg>') repeat;
         }
 
         .footer-content {
             max-width: 1600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 4rem;
             margin-bottom: 4rem;
         }
 
         .footer-about h3 {
             font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
             letter-spacing: 3px;
-            color: #fff;
         }
 
         .footer-about p {
-            line-height: 2;
+            color: #aaa;
+            line-height: 1.8;
             font-size: 1rem;
-            color: rgba(255,255,255,0.7);
         }
 
         .footer-contact h4,
         .footer-sitemap h4,
         .footer-services h4 {
-            color: #fff;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             font-weight: 400;
-            margin-bottom: 2rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .footer-contact h4::after,
+        .footer-sitemap h4::after,
+        .footer-services h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
         }
 
         .footer-contact ul,
@@ -1123,319 +1377,501 @@
             list-style: none;
         }
 
-        .footer-contact ul li {
-            margin-bottom: 1.3rem;
+        .footer-contact li,
+        .footer-services li {
+            padding: 0.8rem 0;
+            color: #aaa;
+            font-size: 0.95rem;
             display: flex;
             align-items: flex-start;
             gap: 1rem;
         }
 
-        .footer-icon {
-            font-size: 1.2rem;
-            min-width: 25px;
-        }
-
         .footer-icon-text {
-            font-weight: 600;
-            min-width: 90px;
-            display: inline-block;
-            color: #c41e3a;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
+            color: var(--primary-red);
+            font-weight: 500;
+            min-width: 80px;
         }
 
-        .footer-sitemap ul li,
-        .footer-services ul li {
-            margin-bottom: 1rem;
+        .footer-sitemap li {
+            padding: 0.5rem 0;
         }
 
-        .footer-sitemap ul li a {
-            color: rgba(255,255,255,0.7);
+        .footer-sitemap a {
+            color: #aaa;
             text-decoration: none;
             transition: all 0.3s ease;
             display: inline-block;
+            font-size: 0.95rem;
         }
 
-        .footer-sitemap ul li a:hover {
-            color: #c41e3a;
+        .footer-sitemap a:hover {
+            color: var(--primary-red);
             transform: translateX(5px);
         }
 
-        .footer-services ul li {
-            color: rgba(255,255,255,0.7);
-        }
-
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* Articles Page */
+        .articles-section {
+            padding: 12rem 6% 8rem;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #fff 100%);
+            min-height: 100vh;
+        }
+
+        .articles-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .empty-state {
             text-align: center;
+            padding: 6rem 2rem;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
 
-        .footer-bottom p {
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            margin-bottom: 0.8rem;
+        .empty-state p {
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: 300;
         }
 
-        .footer-legal {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.85rem;
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-blue));
+            z-index: 10001;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.1s ease;
         }
 
-        .footer-legal {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.85rem;
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-content h1 {
+                font-size: 4.5rem;
+            }
+
+            .news-title,
+            .carousel-header h2,
+            .about-content h2,
+            .section-header h2,
+            .contact-info h2 {
+                font-size: 3rem;
+            }
         }
 
-        footer p {
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        /* Responsive */
         @media (max-width: 1024px) {
-            .hero h1 {
-                font-size: 4rem;
+            header {
+                padding: 1.2rem 4%;
             }
 
             .nav-links {
                 gap: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 4rem;
+            }
+
+            .about-container,
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
             }
 
             .footer-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 3rem;
             }
+
+            .practice-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
+            /* Header Mobile */
             header {
-                padding: 1.5rem 5%;
+                padding: 1rem 4%;
+            }
+
+            header.scrolled {
+                padding: 0.8rem 4%;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .logo {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
                 letter-spacing: 2px;
+                display: none;
+            }
+
+            .logo::before {
+                display: none;
             }
 
             .nav-links {
-                gap: 1.2rem;
-                font-size: 0.8rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-            .page-transition-logo {
-                font-size: 2rem;
-                letter-spacing: 4px;
+            .nav-links a {
+                font-size: 0.85rem;
+                padding: 6px 12px;
             }
 
-            /* Hero Mobile */
-            .hero {
-                margin-top: 80px;
+            /* Hero Section Mobile */
+            .hero-advanced {
+                margin-top: 120px;
                 min-height: auto;
-                height: auto;
+                padding: 4rem 5% 5rem;
             }
 
-            .carousel {
-                min-height: 550px;
-                height: auto;
+            .hero-content h1 {
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+                letter-spacing: -1px;
             }
 
-            .carousel-slide {
-                min-height: 550px;
-                padding: 3rem 5%;
-                position: relative;
+            .hero-content p {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+                line-height: 1.7;
             }
 
-            .carousel-prev,
-            .carousel-next {
-                padding: 1rem 0.8rem;
-                font-size: 1.2rem;
+            .hero-cta {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
             }
 
-            .carousel-prev {
-                left: 1rem;
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                padding: 16px 35px;
+                font-size: 0.95rem;
+                text-align: center;
             }
 
-            .carousel-next {
-                right: 1rem;
+            /* News Cards Mobile */
+            .news-cards-section {
+                padding: 0;
             }
 
-            .carousel-dots {
-                bottom: 2rem;
+            .news-cards-container {
+                padding: 5rem 5%;
             }
 
-            .dot {
-                width: 10px;
-                height: 10px;
+            .news-title {
+                font-size: 2.2rem;
+                margin-bottom: 3rem;
             }
 
-            .dot.active {
-                width: 28px;
+            .news-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
-            .hero h1 {
-                font-size: 2.8rem;
+            .news-card {
+                padding: 2.5rem;
+            }
+
+            .news-card h3 {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .news-card p {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            .news-icon {
+                width: 70px;
+                height: 70px;
                 margin-bottom: 1.5rem;
             }
 
-            .hero p {
+            .news-icon svg {
+                width: 35px;
+                height: 35px;
+            }
+
+            /* Carousel Mobile */
+            .carousel-section {
+                padding: 5rem 5%;
+            }
+
+            .carousel-header {
+                margin-bottom: 3rem;
+            }
+
+            .carousel-header h2 {
+                font-size: 2.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .carousel-header .subtitle {
                 font-size: 1.1rem;
-                line-height: 1.7;
+            }
+
+            .carousel-slide {
+                flex-direction: column;
+                padding: 2.5rem;
+                min-height: auto;
+            }
+
+            .carousel-slide::before {
+                font-size: 8rem;
+                top: 2rem;
+                left: 2rem;
+            }
+
+            .slide-content {
+                padding-right: 0;
                 margin-bottom: 2rem;
             }
-            
-            .stats {
-                flex-direction: column;
-                gap: 2.5rem;
-                margin-top: 3rem;
+
+            .slide-content h3 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
             }
 
-            .stat {
-                padding-left: 1.5rem;
+            .slide-content p {
+                font-size: 1.05rem;
+                line-height: 1.8;
+                margin-bottom: 2rem;
             }
 
-            .stat::before {
-                width: 2px;
+            .read-more {
+                font-size: 1rem;
             }
 
-            .stat h3 {
-                font-size: 2.8rem;
+            .slide-image {
+                width: 250px;
+                height: 250px;
+                margin: 0 auto;
             }
 
-            .stat p {
-                font-size: 0.8rem;
+            .slide-image svg {
+                width: 120px;
+                height: 120px;
             }
 
-            /* Sections Mobile */
-            .home-practice-preview,
-            .testimonials-section,
-            .contact-section {
-                padding: 4rem 5%;
+            .carousel-controls {
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .carousel-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+
+            .dot {
+                width: 12px;
+                height: 12px;
+            }
+
+            /* About Section Mobile */
+            .about-section {
+                padding: 6rem 5%;
+            }
+
+            .about-container {
+                gap: 3rem;
+            }
+
+            .about-image-main {
+                height: 400px;
+            }
+
+            .about-image-main::before {
+                font-size: 6rem;
+            }
+
+            .about-content h2 {
+                font-size: 2.2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .about-content p {
+                font-size: 1.05rem;
+                line-height: 1.8;
+                margin-bottom: 1.5rem;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .stat-box {
+                padding: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.95rem;
+            }
+
+            /* Practice Section Mobile */
+            .practice-section {
+                padding: 6rem 5%;
+            }
+
+            .section-header {
+                margin-bottom: 4rem;
             }
 
             .section-header h2 {
                 font-size: 2.2rem;
+                margin-bottom: 1rem;
             }
 
-            .section-header .line {
-                width: 60px;
+            .section-header p {
+                font-size: 1.1rem;
             }
 
-            .section-subtitle {
-                font-size: 1rem;
-            }
-
-            .practice-preview-grid {
+            .practice-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
-            .practice-preview-card {
-                padding: 3rem 2rem;
+            .practice-card {
+                padding: 2.5rem;
             }
 
-            .practice-preview-card h3 {
-                font-size: 1.5rem;
+            .practice-icon {
+                width: 75px;
+                height: 75px;
+                margin-bottom: 2rem;
             }
 
-            .practice-preview-card p {
+            .practice-icon svg {
+                width: 38px;
+                height: 38px;
+            }
+
+            .practice-card h3 {
+                font-size: 1.7rem;
+                margin-bottom: 1rem;
+            }
+
+            .practice-card p {
+                font-size: 1.05rem;
+                line-height: 1.8;
+                margin-bottom: 1.5rem;
+            }
+
+            .practice-card li {
                 font-size: 1rem;
+                padding: 0.7rem 0;
+                padding-left: 2rem;
             }
 
-            .view-all-btn {
-                padding: 1rem 2.5rem;
-                font-size: 0.85rem;
+            /* Contact Section Mobile */
+            .contact-section {
+                padding: 6rem 5%;
             }
 
-            /* CTA Mobile */
-            .cta-section {
-                padding: 4rem 5%;
+            .contact-container {
+                gap: 3rem;
             }
 
-            .cta-content h2 {
+            .contact-info h2 {
                 font-size: 2.2rem;
                 margin-bottom: 1.5rem;
             }
 
-            .cta-content p {
-                font-size: 1.1rem;
+            .contact-info p {
+                font-size: 1.05rem;
+                line-height: 1.8;
                 margin-bottom: 2rem;
             }
 
-            .cta-btn {
-                padding: 1.2rem 3rem;
-                font-size: 0.85rem;
-                letter-spacing: 1.5px;
+            .contact-details {
+                gap: 1.5rem;
             }
 
-            /* Testimonials Mobile */
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+            .contact-item {
+                padding: 1.5rem;
+                gap: 1.5rem;
             }
 
-            .testimonial-card {
-                padding: 2.5rem 2rem;
+            .contact-item-icon {
+                width: 55px;
+                height: 55px;
             }
 
-            .testimonial-card::before {
-                font-size: 4rem;
-                top: 1.5rem;
-                left: 1.5rem;
+            .contact-item-icon svg {
+                width: 28px;
+                height: 28px;
             }
 
-            .testimonial-text {
-                font-size: 1.05rem;
-                line-height: 1.8;
+            .contact-item-text h4 {
+                font-size: 1rem;
             }
 
-            /* Contact Mobile */
-            .contact-container h2 {
-                font-size: 2.2rem;
+            .contact-item-text p {
+                font-size: 0.95rem;
             }
 
             .contact-form {
-                padding: 2.5rem 2rem;
+                padding: 3rem 2rem;
+            }
+
+            .form-group {
+                margin-bottom: 2rem;
+            }
+
+            .form-group label {
+                font-size: 1rem;
+                margin-bottom: 0.8rem;
             }
 
             .form-group input,
             .form-group textarea {
-                padding: 1rem;
-                font-size: 1rem;
+                padding: 1rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            .form-group textarea {
+                min-height: 150px;
             }
 
             .submit-btn {
-                width: 100%;
-                padding: 1.2rem 2rem;
-            }
-
-            /* About Page Mobile */
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .about-header h1 {
-                font-size: 2.2rem;
-            }
-
-            .profile-image {
-                width: 200px;
-                height: 200px;
-                font-size: 4rem;
-            }
-
-            .about-text h2 {
-                font-size: 1.6rem;
-            }
-
-            .about-text {
+                padding: 1.3rem;
                 font-size: 1rem;
-            }
-
-            /* Practice Page Mobile */
-            .practice-grid {
-                grid-template-columns: 1fr;
             }
 
             /* Footer Mobile */
@@ -1445,90 +1881,220 @@
 
             .footer-grid {
                 grid-template-columns: 1fr;
-                gap: 3rem;
+                gap: 2.5rem;
+                margin-bottom: 3rem;
             }
 
             .footer-about h3 {
                 font-size: 1.5rem;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .footer-about p {
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            .footer-contact h4,
+            .footer-sitemap h4,
+            .footer-services h4 {
+                font-size: 1.15rem;
+                margin-bottom: 1rem;
+            }
+
+            .footer-contact li,
+            .footer-services li {
+                padding: 0.6rem 0;
+                font-size: 0.9rem;
+                flex-direction: column;
+                gap: 0.3rem;
+                align-items: flex-start;
+            }
+
+            .footer-icon-text {
+                min-width: auto;
+            }
+
+            .footer-sitemap a {
+                font-size: 0.9rem;
             }
 
             .footer-bottom {
-                padding-top: 2rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding-top: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .footer-legal {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            /* Articles Page Mobile */
+            .articles-section {
+                padding: 8rem 5% 5rem;
+            }
+
+            .empty-state {
+                padding: 4rem 2rem;
+            }
+
+            .empty-state p {
+                font-size: 1.2rem;
+            }
+
+            /* Page Transition Mobile */
+            .page-transition-logo {
+                font-size: 2rem;
+                letter-spacing: 4px;
             }
         }
 
         @media (max-width: 480px) {
-            .carousel-slide {
-                min-height: 550px;
+            /* Extra small screens */
+            .hero-content h1 {
+                font-size: 2rem;
             }
 
-            .carousel-prev,
-            .carousel-next {
-                padding: 0.8rem 0.6rem;
+            .hero-content p {
                 font-size: 1rem;
             }
 
-            .carousel-prev {
-                left: 0.5rem;
+            .news-title,
+            .carousel-header h2,
+            .about-content h2,
+            .section-header h2,
+            .contact-info h2 {
+                font-size: 1.8rem;
             }
 
-            .carousel-next {
-                right: 0.5rem;
+            .news-card,
+            .practice-card,
+            .contact-form {
+                padding: 2rem;
             }
 
-            .carousel-dots {
-                bottom: 1.5rem;
-                gap: 0.7rem;
+            .carousel-slide {
+                padding: 2rem;
             }
 
-            .dot {
-                width: 8px;
-                height: 8px;
+            .slide-content h3 {
+                font-size: 1.7rem;
             }
 
-            .dot.active {
-                width: 24px;
+            .slide-content p {
+                font-size: 1rem;
             }
 
-            .hero h1 {
+            .slide-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .slide-image svg {
+                width: 100px;
+                height: 100px;
+            }
+
+            .about-image-main {
+                height: 300px;
+            }
+
+            .about-image-main::before {
+                font-size: 5rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                padding: 14px 30px;
+                font-size: 0.9rem;
+            }
+
+            .carousel-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .page-transition-logo {
+                font-size: 1.5rem;
+                letter-spacing: 3px;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .hero-advanced {
+                min-height: auto;
+                padding: 3rem 5%;
+            }
+
+            .hero-content h1 {
                 font-size: 2.2rem;
             }
 
-            .hero p {
-                font-size: 1rem;
+            .about-image-main {
+                height: 350px;
             }
 
-            .stat h3 {
-                font-size: 2.5rem;
+            .carousel-slide {
+                flex-direction: row;
+                gap: 2rem;
             }
 
-            .section-header h2 {
-                font-size: 1.8rem;
+            .slide-content {
+                margin-bottom: 0;
             }
 
-            .cta-content h2 {
-                font-size: 1.8rem;
+            .slide-image {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            /* Remove hover effects that don't work well on touch */
+            .news-card:hover,
+            .practice-card:hover,
+            .contact-item:hover,
+            .stat-box:hover {
+                transform: none;
             }
 
-            .contact-container h2 {
-                font-size: 1.8rem;
+            /* Make tap targets larger */
+            .nav-links a {
+                padding: 10px 15px;
             }
 
-            .nav-links {
-                gap: 0.8rem;
-                font-size: 0.75rem;
+            .carousel-btn {
+                width: 55px;
+                height: 55px;
             }
 
-            .contact-form {
-                padding: 2rem 1.5rem;
+            .dot {
+                width: 15px;
+                height: 15px;
+            }
+
+            /* Remove complex animations on touch devices */
+            .shape-1,
+            .shape-2,
+            .shape-3 {
+                animation: none;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
+
     <!-- Page Transition Overlay -->
-    <div class="page-transition active">
+    <div class="page-transition">
+        <div class="transition-overlay"></div>
         <div class="page-transition-logo">AVOCAT M.</div>
     </div>
 
@@ -1537,131 +2103,230 @@
         <nav>
             <a href="#" class="logo" onclick="navigateTo(event, 'home')">AVOCAT <span>M.</span></a>
             <ul class="nav-links">
-                <li><a href="#" onclick="navigateTo(event, 'home')">Acasă</a></li>
-                <li><a href="#" onclick="navigateTo(event, 'about')">Despre Mine</a></li>
-                <li><a href="#" onclick="navigateTo(event, 'practice')">Domenii de Activitate</a></li>
-                <li><a href="#" onclick="navigateTo(event, 'articles')">Articole</a></li>
+                <li><a href="#" onclick="navigateTo(event, 'home')">ACASĂ</a></li>
+                <li><a href="#" onclick="navigateTo(event, 'about')">DESPRE MINE</a></li>
+                <li><a href="#" onclick="navigateTo(event, 'practice')">DOMENII</a></li>
+                <li><a href="#" onclick="navigateTo(event, 'articles')">ARTICOLE</a></li>
+                <li><a href="#contact-form" onclick="scrollToContact(event)">CONTACT</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- HOME PAGE -->
     <div class="page active" id="home">
-        <section class="hero-simple">
+        <!-- Enhanced Hero Section -->
+        <section class="hero-advanced">
+            <div class="hero-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
             <div class="hero-content">
-                <h1>Consultanță Juridică <span class="highlight">Profesionistă</span></h1>
-                <p>Oferind servicii juridice complete în drept civil, cu experiență și dedicare pentru fiecare caz în parte.</p>
-                
-                <div class="stats">
-                    <div class="stat">
-                        <h3>15+</h3>
-                        <p>Ani de experiență</p>
+                <h1>
+                    Consultanță Juridică<br>
+                    <span class="highlight">de Încredere și Profesionalism</span>
+                </h1>
+                <p>Cabinet de avocat specializat în drept civil, oferind soluții juridice personalizate și reprezentare de excelență în instanță.</p>
+                <div class="hero-cta">
+                    <a href="#contact-form" class="btn-primary" onclick="scrollToContact(event)">Programează o Consultație</a>
+                    <a href="#" class="btn-secondary" onclick="navigateTo(event, 'about')">Află Mai Multe</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced News Cards Section -->
+        <section class="news-cards-section">
+            <div class="news-cards-container">
+                <h2 class="news-title">Știri și Cazuri Recente</h2>
+                <div class="news-cards-grid">
+                    <div class="news-card">
+                        <div class="news-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Titlu Știre / Caz</h3>
+                        <p>Descriere scurtă a știrii sau cazului recent. Aici va fi plasat conținutul relevant despre evenimentul juridic, modificarea legislativă sau cazul de succes. Text placeholder pentru formatare uniformă.</p>
                     </div>
-                    <div class="stat">
-                        <h3>7</h3>
-                        <p>Domenii de practică</p>
+                    <div class="news-card">
+                        <div class="news-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Titlu Știre / Caz</h3>
+                        <p>Descriere scurtă a știrii sau cazului recent. Aici va fi plasat conținutul relevant despre evenimentul juridic, modificarea legislativă sau cazul de succes. Text placeholder pentru formatare uniformă.</p>
                     </div>
-                    <div class="stat">
-                        <h3>100+</h3>
-                        <p>Cazuri finalizate</p>
+                    <div class="news-card">
+                        <div class="news-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Titlu Știre / Caz</h3>
+                        <p>Descriere scurtă a știrii sau cazului recent. Aici va fi plasat conținutul relevant despre evenimentul juridic, modificarea legislativă sau cazul de succes. Text placeholder pentru formatare uniformă.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Practice Areas Preview -->
-        <section class="home-practice-preview">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Domenii de Activitate</h2>
-                    <div class="line"></div>
-                    <p class="section-subtitle">Servicii juridice complete în drept civil</p>
+        <!-- Enhanced Carousel Section -->
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel-header">
+                    <h2>Servicii Juridice Premium</h2>
+                    <p class="subtitle">Consultanță specializată în drept civil</p>
                 </div>
 
-                <div class="practice-preview-grid">
-                    <div class="practice-preview-card">
-                        <h3>Drept Civil</h3>
-                        <p>Consultanță și reprezentare în contracte, obligații și răspundere civilă.</p>
-                        <a href="#" onclick="navigateTo(event, 'practice')" class="learn-more-btn">Află mai multe</a>
+                <div class="carousel">
+                    <div class="carousel-slide active">
+                        <div class="slide-content">
+                            <h3>Drept Civil</h3>
+                            <p>Oferind consultanță și reprezentare în instanță pentru diverse aspecte ale dreptului civil, asigur clienților mei soluții juridice eficiente și bine fundamentate. Cu o experiență de peste 15 ani, am dezvoltat o expertiza solidă în domenii variate ale dreptului civil.</p>
+                            <a href="#" class="read-more" onclick="navigateTo(event, 'practice')">Descoperă mai mult</a>
+                        </div>
+                        <div class="slide-image">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="practice-preview-card">
-                        <h3>Drept Civil</h3>
-                        <p>Asistență juridică în litigii civile și protecția drepturilor patrimoniale.</p>
-                        <a href="#" onclick="navigateTo(event, 'practice')" class="learn-more-btn">Află mai multe</a>
+
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h3>Consultanță Juridică Personalizată</h3>
+                            <p>Fiecare caz este unic și necesită o abordare adaptată. Ofer consultanță juridică detaliată, analizând fiecare aspect al situației clientului pentru a identifica cea mai bună strategie juridică. Comunicarea deschisă și transparența sunt prioritățile mele.</p>
+                            <a href="#" class="read-more" onclick="navigateTo(event, 'about')">Află mai multe</a>
+                        </div>
+                        <div class="slide-image">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="practice-preview-card">
-                        <h3>Drept Civil</h3>
-                        <p>Reprezentare în instanță cu strategii juridice personalizate.</p>
-                        <a href="#" onclick="navigateTo(event, 'practice')" class="learn-more-btn">Află mai multe</a>
+
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h3>Reprezentare în Instanță</h3>
+                            <p>Asigur reprezentare profesionistă în fața instanțelor de judecată, apărând cu fermitate drepturile și interesele clienților mei. Cu o pregătire riguroasă și o cunoaștere aprofundată a procedurii civile, mă implic activ în fiecare etapă a procesului judiciar.</p>
+                            <a href="#" class="read-more" onclick="scrollToContact(event)">Contactează-mă</a>
+                        </div>
+                        <div class="slide-image">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
 
-                <div class="view-all-btn-container">
-                    <a href="#" onclick="navigateTo(event, 'practice')" class="view-all-btn">TOATE DOMENIILE</a>
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev" onclick="changeSlide(-1)">‹</button>
+                    <div class="carousel-dots">
+                        <span class="dot active" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                    </div>
+                    <button class="carousel-btn next" onclick="changeSlide(1)">›</button>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="cta-section">
-            <div class="cta-content">
-                <h2>Aveți nevoie de asistență juridică?</h2>
-                <p>Programați o consultație și vă voi ajuta să găsiți cea mai bună soluție juridică pentru cazul dumneavoastră.</p>
-                <a href="#contact-form" onclick="scrollToContact(event)" class="cta-btn">CONTACTEAZĂ-MĂ ACUM</a>
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="testimonials-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Ce spun clienții mei</h2>
-                    <div class="line"></div>
-                </div>
-
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <div class="stars">★★★★★</div>
-                        <p class="testimonial-text">"Profesionalism și dedicare totală. Am fost reprezentat cu succes într-un caz complex de drept civil. Recomand cu încredere serviciile oferite."</p>
-                        <p class="testimonial-author">— Client</p>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="stars">★★★★★</div>
-                        <p class="testimonial-text">"Comunicare excelentă și transparență deplină pe tot parcursul procesului juridic. M-am simțit susținut și înțeles în fiecare etapă."</p>
-                        <p class="testimonial-author">— Client</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        <!-- Enhanced Contact Section -->
         <section class="contact-section" id="contact-form">
             <div class="contact-container">
-                <h2>Trimite-mi un Mesaj</h2>
-                <div class="line"></div>
-                
+                <div class="contact-info">
+                    <h2>Hai să discutăm despre cazul tău</h2>
+                    <p>Sunt aici pentru a-ți oferi consultanță juridică de calitate și pentru a te ajuta să găsești cele mai bune soluții legale. Contactează-mă pentru o programare.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-item-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div class="contact-item-text">
+                                <h4>Adresă</h4>
+                                <p>...</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-item-text">
+                                <h4>Telefon</h4>
+                                <p>...</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </div>
+                            <div class="contact-item-text">
+                                <h4>Email</h4>
+                                <p>...</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <div class="contact-item-text">
+                                <h4>Program</h4>
+                                <p>Luni - Vineri: 9:00 - 18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <form class="contact-form" onsubmit="handleSubmit(event)">
                     <div class="form-group">
-                        <label for="name">Nume și Prenume</label>
+                        <label for="name">Nume Complet</label>
                         <input type="text" id="name" name="name" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="phone">Telefon</label>
-                        <input type="tel" id="phone" name="phone">
+                        <input type="tel" id="phone" name="phone" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="message">Mesaj</label>
                         <textarea id="message" name="message" required></textarea>
                     </div>
-                    
-                    <button type="submit" class="submit-btn">TRIMITE MESAJ</button>
+                    <button type="submit" class="submit-btn">Trimite Mesaj</button>
                 </form>
             </div>
         </section>
@@ -1727,45 +2392,30 @@
     <div class="page" id="about">
         <section class="about-section">
             <div class="about-container">
-                <div class="about-header">
-                    <h1>Despre Mine</h1>
-                    <div class="line"></div>
+                <div class="about-image-wrapper">
+                    <div class="about-image-main"></div>
+                    <div class="about-decorative about-decorative-1"></div>
+                    <div class="about-decorative about-decorative-2"></div>
                 </div>
-
                 <div class="about-content">
-                    <div class="profile-section">
-                        <div class="profile-image">M</div>
-                        <h2 class="profile-name">Avocat M.</h2>
-                        <p class="profile-title">Avocat în drept civil</p>
-                    </div>
+                    <h2>Despre Mine & <span>Experiența Mea</span></h2>
+                    <p>Sunt avocat cu peste 15 ani de experiență în domeniul dreptului civil, dedicat oferirii de servicii juridice de cea mai înaltă calitate. De-a lungul carierei mele, am reprezentat cu succes numeroși clienți în diverse cazuri complexe, câștigând experiență vastă și o înțelegere profundă a legislației civile.</p>
+                    <p>Abordarea mea se bazează pe ascultarea atentă a nevoilor fiecărui client și dezvoltarea de strategii juridice personalizate. Cred în comunicarea deschisă, transparență și în menținerea unor standarde etice înalte în toate aspectele practicii mele juridice.</p>
+                    <p>Misiunea mea este să ofer consultanță juridică de încredere și să apăr cu fermitate drepturile și interesele clienților mei, asigurându-mă că aceștia primesc reprezentarea pe care o merită.</p>
 
-                    <div class="about-text">
-                        <h2>Experiență și Profesionalism</h2>
-                        <p>
-                            Cu peste 15 ani de experiență în domeniul dreptului civil, am dedicat întreaga mea carieră apărării drepturilor și intereselor clienților mei. Practica mea juridică se bazează pe principii solide de integritate, profesionalism și dedicare totală față de fiecare caz.
-                        </p>
-                        <p>
-                            Am absolvit Facultatea de Drept și mi-am consolidat expertiza prin practica constantă și studiul aprofundat al legislației civile românești. De-a lungul carierei mele, am reprezentat cu succes clienți în diverse cauze civile, obținând rezultate favorabile și construind relații de încredere pe termen lung.
-                        </p>
-
-                        <h2>Abordarea Mea</h2>
-                        <p>
-                            Cred cu tărie că fiecare caz este unic și merită o atenție personalizată. Ascult cu atenție nevoile clienților mei, analizez cu grijă fiecare detaliu și dezvolt strategii juridice adaptate specificului fiecărei situații. Transparența și comunicarea deschisă sunt fundamentale în relația mea cu clienții.
-                        </p>
-
-                        <h2>Valori Profesionale</h2>
-                        <ul>
-                            <li>Integritate și etică profesională ireprosabilă</li>
-                            <li>Dedicare totală față de interesele clienților</li>
-                            <li>Comunicare clară și transparentă</li>
-                            <li>Actualizare constantă cu legislația și jurisprudența</li>
-                            <li>Abordare personalizată pentru fiecare caz</li>
-                            <li>Confidențialitate absolută</li>
-                        </ul>
-
-                        <p>
-                            Mă angajez să ofer servicii juridice de cea mai înaltă calitate, punând accentul pe rezultate concrete și pe satisfacția clienților mei. Indiferent de complexitatea cauzei, voi fi alături de dvs. la fiecare pas, oferind consultanță profesionistă și reprezentare juridică eficientă.
-                        </p>
+                    <div class="about-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Ani de Experiență</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Cazuri Rezolvate</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Rată de Succes</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1833,44 +2483,29 @@
         <section class="practice-section">
             <div class="practice-container">
                 <div class="section-header">
-                    <h1>Domenii de Activitate</h1>
+                    <h2>Domenii de Activitate</h2>
                     <div class="line"></div>
+                    <p>Servicii juridice specializate în drept civil</p>
                 </div>
 
                 <div class="practice-grid">
                     <div class="practice-card">
+                        <div class="practice-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </div>
                         <h3>Drept Civil</h3>
-                        <p>Consultanță și reprezentare juridică completă în toate aspectele dreptului civil, inclusiv contracte, obligații, și răspundere civilă.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Asistență juridică specializată în litigii civile, apărarea drepturilor patrimoniale și nepatrimoniale ale clienților.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Reprezentare în instanță pentru soluționarea diferendelor civile, cu o abordare strategică și profesionistă.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Consultanță în redactarea și interpretarea contractelor civile, asigurând protecția intereselor clienților.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Asistență juridică în cauze privind proprietatea, uzufructul și alte drepturi reale, cu expertiză și dedicare.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Reprezentare în litigii succesorale, partaje și alte cauze de drept civil cu implicații familiale.</p>
-                    </div>
-
-                    <div class="practice-card">
-                        <h3>Drept Civil</h3>
-                        <p>Consultanță juridică complexă în domeniul dreptului civil, adaptată nevoilor specifice ale fiecărui client.</p>
+                        <p>Oferind consultanță și reprezentare în instanță pentru diverse aspecte ale dreptului civil, asigur clienților mei soluții juridice eficiente și bine fundamentate. Cu o experiență de peste 15 ani, am dezvoltat o expertiza solidă în domenii variate ale dreptului civil.</p>
+                        <ul>
+                            <li>Contracte și obligații civile</li>
+                            <li>Drept de proprietate</li>
+                            <li>Răspundere civilă delictuală</li>
+                            <li>Succesiuni și donații</li>
+                            <li>Dreptul familiei</li>
+                            <li>Litigii civile complexe</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -1938,7 +2573,7 @@
         <section class="articles-section">
             <div class="articles-container">
                 <div class="section-header">
-                    <h1>Articole</h1>
+                    <h2>Articole</h2>
                     <div class="line"></div>
                 </div>
 
@@ -2006,6 +2641,45 @@
     </div>
 
     <script>
+        // Header scroll effect
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Scroll Progress Bar
+        const scrollProgress = document.querySelector('.scroll-progress');
+
+        window.addEventListener('scroll', () => {
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.pageYOffset / windowHeight);
+            scrollProgress.style.transform = `scaleX(${scrolled})`;
+        });
+
+        // Parallax effect for shapes
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 20;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                shape.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
         // Carousel functionality
         let currentSlideIndex = 1;
         let slideInterval;
@@ -2049,16 +2723,10 @@
         }
 
         function startAutoSlide() {
-            slideInterval = setInterval(autoSlide, 5000); // Change slide every 5 seconds
+            slideInterval = setInterval(autoSlide, 5000);
         }
 
-        // Start auto-slide when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            showSlide(currentSlideIndex);
-            startAutoSlide();
-        });
-
-        // Navigation functionality
+        // Navigation functionality with enhanced transitions
         function navigateTo(event, page) {
             event.preventDefault();
             
@@ -2096,20 +2764,62 @@
 
         function scrollToContact(event) {
             event.preventDefault();
-            const contactSection = document.getElementById('contact-form');
-            if (contactSection) {
-                contactSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Check if we're on the home page
+            const homePage = document.getElementById('home');
+            if (!homePage.classList.contains('active')) {
+                // Navigate to home page first
+                navigateTo(event, 'home');
+                
+                // Wait for transition to complete, then scroll
+                setTimeout(() => {
+                    const contactSection = document.getElementById('contact-form');
+                    if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 1500);
+            } else {
+                // Already on home page, just scroll
+                const contactSection = document.getElementById('contact-form');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         }
 
         // Initial page load animation
         window.addEventListener('load', () => {
             const transition = document.querySelector('.page-transition');
+            showSlide(currentSlideIndex);
+            startAutoSlide();
             
             // Wait a bit, then hide the transition
             setTimeout(() => {
                 transition.classList.add('hide');
             }, 1200);
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.news-card, .practice-card, .contact-item, .stat-box').forEach(elem => {
+            elem.style.opacity = '0';
+            elem.style.transform = 'translateY(30px)';
+            elem.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(elem);
         });
     </script>
 </body>
